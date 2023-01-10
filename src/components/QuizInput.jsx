@@ -1,39 +1,37 @@
 import React, { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
-const QuizInput = ({index, ResultFunction}) => {
-  const quizSessionStorage = `question${index}`
-
-  if (!sessionStorage.getItem(quizSessionStorage)) {
-    sessionStorage.setItem(quizSessionStorage, JSON.stringify({ id: uuidv4(), question: '', answer: '' }))
+const QuizInput = ({index, ResultFunction, SaveDataFunction, inputData}) => {
+  if (!inputData[index]) {
+    inputData[index] = {
+      id: uuidv4(),
+      type: 'user-input',
+      title: '',
+      answer: ''
+    }
   }
 
-  const quizSessionStorageBody = JSON.parse(sessionStorage.getItem(quizSessionStorage))
+  const [quiz, setQuiz] = useState(inputData[index])
 
-  const [question, setQuestion] = useState(quizSessionStorageBody.question)
-  const [answer, setAnswer] = useState(quizSessionStorageBody.answer)
-
-  const CreateSessionStorage = (setState, event) => {
+  const CreateSessionStorage = async (setState, event) => {
     if (setState == 'setQuestion') {
-      setQuestion(event)
-      sessionStorage.setItem(quizSessionStorage, JSON.stringify({ id: quizSessionStorageBody.id, question: event, answer: answer }))
-      ResultFunction({ type: 'user-input', title: event, correct: answer }, index)
+      await setQuiz({ ...quiz, title: event })
     }
     else {
-      setAnswer(event)
-      sessionStorage.setItem(quizSessionStorage, JSON.stringify({ id: quizSessionStorageBody.id, question: question, answer: event }))
-      ResultFunction({ type: 'user-input', title: question, correct: event }, index)
+      await setQuiz({ ...quiz, answer: event })
     }
+
+    SaveDataFunction(quiz, index)
   }
 
   return (
     <div className='quiz-card'>
-        <label>Вопрос {question}</label>
-        <input type="text" value={question} onChange={event => CreateSessionStorage('setQuestion', event.target.value)} />
+        <label>Вопрос {quiz.title}</label>
+        <input type="text" value={quiz.title} onChange={event => CreateSessionStorage('setQuestion', event.target.value)} />
 
         <div className='quiz-group'>
-            <label>Ответ {answer}</label>
-            <input type="text" value={answer} onChange={event => CreateSessionStorage('setAnswer', event.target.value)} />
+            <label>Ответ {quiz.answer}</label>
+            <input type="text" value={quiz.answer} onChange={event => CreateSessionStorage('setAnswer', event.target.value)} />
         </div>
     </div>
   )

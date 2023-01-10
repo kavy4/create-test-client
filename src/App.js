@@ -10,6 +10,13 @@ function App() {
   
   const [testObject, setTestObject] = useState([])
 
+  const SaveDataFromInput = (data, index) => {
+    const prevTestObject = testObject
+    prevTestObject[index] = data
+    setTestObject(prevTestObject)
+    // console.log(testObject)
+  }
+
   const GetReadyObject = (quiz, index) => {
     const prevTestObject = testObject
     prevTestObject[index] = quiz
@@ -19,7 +26,7 @@ function App() {
 
   const SendTestInTelegram = () => {
     axios.post('/api/send-test-to-telegram', testObject)
-    console.log(testObject)
+    // console.log(testObject)
   }
 
   return (
@@ -31,7 +38,7 @@ function App() {
       <button onClick={() => setCardList([...cardList, 'input'])}>Создать вопрос с вводом ответа</button>
 
       <hr />
-      <QuizList list={cardList} ResultFunction={GetReadyObject} />
+      <QuizList list={cardList} ResultFunction={GetReadyObject} SaveDataFunction={SaveDataFromInput} inputData={testObject} />
       <hr />
 
       <button onClick={() => SendTestInTelegram()}>Готово</button>

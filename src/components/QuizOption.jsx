@@ -1,74 +1,99 @@
 import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
-const QuizOption = ({index, ResultFunction}) => {
-  const quizSessionStorage = `question${index}`
-
-  if (!sessionStorage.getItem(quizSessionStorage)) {
-    sessionStorage.setItem(quizSessionStorage, JSON.stringify({ id: uuidv4(), question: '', answers: ['', '', ''], correct: '' }))
+const QuizOption = ({index, ResultFunction, SaveDataFunction, inputData}) => {
+  if (!inputData[index]) {
+    inputData[index] = {
+      id: uuidv4(),
+      type: 'test',
+      title: '',
+      answers: ['', '', ''],
+      correct: ''
+    }
   }
 
-  const quizSessionStorageBody = JSON.parse(sessionStorage.getItem(quizSessionStorage))
-  
-  const [question, setQuestion] = useState(quizSessionStorageBody.question)
+  const [quiz, setQuiz] = useState(inputData[index])
 
-  const [answer1, setAnswer1] = useState(quizSessionStorageBody.answers[0])
-  const [answer2, setAnswer2] = useState(quizSessionStorageBody.answers[1])
-  const [answer3, setAnswer3] = useState(quizSessionStorageBody.answers[2])
-  const [correct, setCorrect] = useState(quizSessionStorageBody.correct)
-
-  const CreateSessionStorage = (setState, event) => {
+  const CreateSessionStorage = async (setState, event) => {
     if (setState == 'setQuestion') {
-      setQuestion(event)
-      sessionStorage.setItem(quizSessionStorage, JSON.stringify({ id: quizSessionStorageBody.id, question: event, answers: [answer1, answer2, answer3], correct: correct }))
-      ResultFunction({ type: 'test', title: event, answers: [answer1, answer2, answer3], correct: correct }, index)
+      await setQuiz({
+        ...quiz,
+        title: event
+      })
     }
     else {
       if (setState == 'setAnswer1') {
-        setAnswer1(event)
-        sessionStorage.setItem(quizSessionStorage, JSON.stringify({ id: quizSessionStorageBody.id, question: event, answers: [event, answer2, answer3], correct: correct }))
-        ResultFunction({ type: 'test', title: question, answers: [event, answer2, answer3], correct: correct }, index)
+        await setQuiz({
+          ...quiz,
+          answers: quiz.answers.map((item, index) => {
+            if (index == 0) {
+              return event
+            }
+            else {
+              return item
+            }
+          })
+        })
       }
       else {
         if (setState == 'setAnswer2') {
-          setAnswer2(event)
-          sessionStorage.setItem(quizSessionStorage, JSON.stringify({ id: quizSessionStorageBody.id, question: event, answers: [answer1, event, answer3], correct: correct }))
-          ResultFunction({ type: 'test', title: question, answers: [answer1, event, answer3], correct: correct }, index)
+          await setQuiz({
+            ...quiz,
+            answers: quiz.answers.map((item, index) => {
+              if (index == 1) {
+                return event
+              }
+              else {
+                return item
+              }
+            })
+          })
         }
         else {
           if (setState == 'setAnswer3') {
-            setAnswer3(event)
-            sessionStorage.setItem(quizSessionStorage, JSON.stringify({ id: quizSessionStorageBody.id, question: event, answers: [answer1, answer2, event], correct: correct }))
-            ResultFunction({ type: 'test', title: question, answers: [answer1, answer2, event], correct: correct }, index)
+            await setQuiz({
+              ...quiz,
+              answers: quiz.answers.map((item, index) => {
+                if (index == 2) {
+                  return event
+                }
+                else {
+                  return item
+                }
+              })
+            })
           }
           else {
-            setCorrect(event)
-            sessionStorage.setItem(quizSessionStorage, JSON.stringify({ id: quizSessionStorageBody.id, question: event, answers: [answer1, answer2, answer3], correct: event }))
-            ResultFunction({ type: 'test', title: question, answers: [answer1, answer2, answer3], correct: event }, index)
+            await setQuiz({
+              ...quiz,
+              correct: event
+            })
           }
         }
       }
     }
+
+    SaveDataFunction(quiz, index)
   }
   
   return (
     <div className='quiz-card'>
-        <label>Вопрос {question}</label>
-        <input type="text" value={question} onChange={event => CreateSessionStorage('setQuestion', event.target.value)} />
+        <label>Вопрос {quiz.title}</label>
+        <input type="text" value={quiz.title} onChange={event => CreateSessionStorage('setQuestion', event.target.value)} />
 
         <div className='quiz-group'>
-            <label>Ответ 1 {answer1}</label>
-            <input type="text" value={answer1} onChange={event => CreateSessionStorage('setAnswer1', event.target.value)} />
+            <label>Ответ 1 {quiz.answers[0]}</label>
+            <input type="text" value={quiz.answers[0]} onChange={event => CreateSessionStorage('setAnswer1', event.target.value)} />
         </div>
 
         <div className='quiz-group'>
-            <label>Ответ 2 {answer2}</label>
-            <input type="text" value={answer2} onChange={event => CreateSessionStorage('setAnswer2', event.target.value)} />
+            <label>Ответ 2 {quiz.answers[1]}</label>
+            <input type="text" value={quiz.answers[1]} onChange={event => CreateSessionStorage('setAnswer2', event.target.value)} />
         </div>
 
         <div className='quiz-group'>
-            <label>Ответ 3 {answer3}</label>
-            <input type="text" value={answer3} onChange={event => CreateSessionStorage('setAnswer3', event.target.value)} />
+            <label>Ответ 3 {quiz.answers[2]}</label>
+            <input type="text" value={quiz.answers[2]} onChange={event => CreateSessionStorage('setAnswer3', event.target.value)} />
         </div>
 
         <div className='group'>
@@ -76,29 +101,15 @@ const QuizOption = ({index, ResultFunction}) => {
           <select onChange={event => {
             CreateSessionStorage('setCorrect', event.target.value)
           }}>
-            <option selected disabled>----</option>
-            {quizSessionStorageBody.correct != '' ? quizSessionStorageBody.answers.map((text, index) => {
-              if (index == quizSessionStorageBody.correct) {
-                return <option key={uuidv4()} value={index} selected>{index + 1}</option>
+            <option disabled>----</option>
+            {quiz.correct != '' ? quiz.answers.map((text, index) => {
+              if (index == quiz.correct) {
+                return <option key={index} selected value={index}>{index + 1}</option>
               }
               else {
-                return <option key={uuidv4()} value={index}>{index + 1}</option>
+                return <option key={index} value={index}>{index + 1}</option>
               }
-            }) : (quizSessionStorageBody.answers.map((text, index) => <option key={uuidv4()} value={index}>{index + 1}</option>))}
-
-            {/* {() => {
-              for (let index = 0; index < 3; index++) {
-                if (index == quizSessionStorageBody.correct) {
-                  return <option value={index} selected>{index + 1}</option>
-                }
-                else {
-                  return <option value={index}>{index + 1}</option>
-                }
-              }
-            }} */}
-            {/* <option value="0">1</option>
-            <option value="1">2</option>
-            <option value="2">3</option> */}
+            }) : (quiz.answers.map((text, index) => <option key={index} value={index}>{index + 1}</option>))}
           </select>
         </div>
     </div>
