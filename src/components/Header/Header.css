@@ -1,0 +1,16 @@
+header {
+    width: 100vw;
+    height: 75px;
+    box-shadow: 0 0 10px 0 #aaa;
+    background: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 24px;
+    font-weight: 600;
+
+    position: sticky;
+    top: 0;
+}
