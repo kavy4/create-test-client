@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/create-test-client/static/css/main.0288e621.css",
+    "main.js": "/create-test-client/static/js/main.52f1b268.js",
+    "index.html": "/create-test-client/index.html",
+    "main.0288e621.css.map": "/create-test-client/static/css/main.0288e621.css.map",
+    "main.52f1b268.js.map": "/create-test-client/static/js/main.52f1b268.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0288e621.css",
+    "static/js/main.52f1b268.js"
+  ]
+}
