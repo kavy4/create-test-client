@@ -17,31 +17,34 @@ const QuizOption = ({index, ResultFunction}) => {
   const [answer3, setAnswer3] = useState(quizSessionStorageBody.answers[2])
   const [correct, setCorrect] = useState(quizSessionStorageBody.correct)
 
-  const CreateSessionStorage = (setState, event, ResultFunction) => {
+  const CreateSessionStorage = (setState, event) => {
     if (setState == 'setQuestion') {
       setQuestion(event)
       sessionStorage.setItem(quizSessionStorage, JSON.stringify({ id: quizSessionStorageBody.id, question: event, answers: [answer1, answer2, answer3], correct: correct }))
-      // ResultFunction({ type: 'test', title: question, answers: [answer1, answer2, answer3], correct:  })
+      ResultFunction({ type: 'test', title: event, answers: [answer1, answer2, answer3], correct: correct }, index)
     }
     else {
       if (setState == 'setAnswer1') {
         setAnswer1(event)
         sessionStorage.setItem(quizSessionStorage, JSON.stringify({ id: quizSessionStorageBody.id, question: event, answers: [event, answer2, answer3], correct: correct }))
+        ResultFunction({ type: 'test', title: question, answers: [event, answer2, answer3], correct: correct }, index)
       }
       else {
         if (setState == 'setAnswer2') {
           setAnswer2(event)
           sessionStorage.setItem(quizSessionStorage, JSON.stringify({ id: quizSessionStorageBody.id, question: event, answers: [answer1, event, answer3], correct: correct }))
+          ResultFunction({ type: 'test', title: question, answers: [answer1, event, answer3], correct: correct }, index)
         }
         else {
           if (setState == 'setAnswer3') {
             setAnswer3(event)
             sessionStorage.setItem(quizSessionStorage, JSON.stringify({ id: quizSessionStorageBody.id, question: event, answers: [answer1, answer2, event], correct: correct }))
+            ResultFunction({ type: 'test', title: question, answers: [answer1, answer2, event], correct: correct }, index)
           }
           else {
             setCorrect(event)
             sessionStorage.setItem(quizSessionStorage, JSON.stringify({ id: quizSessionStorageBody.id, question: event, answers: [answer1, answer2, answer3], correct: event }))
-            console.log('да')
+            ResultFunction({ type: 'test', title: question, answers: [answer1, answer2, answer3], correct: event }, index)
           }
         }
       }

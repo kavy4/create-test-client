@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import axios from './axios'
 
 import './App.css'
@@ -11,7 +11,7 @@ function App() {
   const [testObject, setTestObject] = useState([])
 
   const GetReadyObject = (quiz, index) => {
-    let prevTestObject = testObject
+    const prevTestObject = testObject
     prevTestObject[index] = quiz
 
     setTestObject(prevTestObject)
@@ -19,6 +19,7 @@ function App() {
 
   const SendTestInTelegram = () => {
     axios.post('/api/send-test-to-telegram', testObject)
+    console.log(testObject)
   }
 
   return (
