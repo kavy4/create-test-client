@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
-const QuizInput = ({index, ResultFunction, SaveDataFunction, inputData}) => {
+const QuizInput = ({index, SaveDataFunction, inputData}) => {
   if (!inputData[index]) {
     inputData[index] = {
       id: uuidv4(),
@@ -13,12 +13,12 @@ const QuizInput = ({index, ResultFunction, SaveDataFunction, inputData}) => {
 
   const [quiz, setQuiz] = useState(inputData[index])
 
-  const CreateSessionStorage = async (setState, event) => {
+  const CreateSessionStorage = (setState, event) => {
     if (setState == 'setQuestion') {
-      await setQuiz({ ...quiz, title: event })
+      setQuiz({ ...quiz, title: event })
     }
     else {
-      await setQuiz({ ...quiz, answer: event })
+      setQuiz({ ...quiz, answer: event })
     }
 
     SaveDataFunction(quiz, index)

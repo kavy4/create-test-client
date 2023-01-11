@@ -11,6 +11,7 @@
     box-shadow: 0 0 20px 0 #aaa;
 
     margin: 50px auto;
+    font-size: 18px;
 }
 
 .quiz-group {
@@ -33,4 +34,33 @@ button {
 
     cursor: pointer;
     transition: 0.2s;
+}
+
+button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.quiz-list {
+    width: 60vw;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: #aaa 0px 0px 10px 0px inset
+}
+
+@media (max-width: 450px) {
+    .quiz-list {
+        width: 100vw;
+        padding: 10px;
+    }
+}
+
+input {
+    border: 0;
+    border-bottom: 1px solid gray;
+    margin: 5px auto 10px auto;
+
+    padding: 2.5px;
+    font-size: 16px;
 }

@@ -3,16 +3,16 @@ import { v4 as uuidv4 } from 'uuid'
 import QuizOption from './QuizOption'
 import QuizInput from './QuizInput'
 
-const QuizList = ({list, ResultFunction, SaveDataFunction, inputData}) => {
+const QuizList = ({list, SaveDataFunction, inputData}) => {
   if (list.length != 0) {
     return (
-      <div>
+      <div className='quiz-list'>
         {list.map((quiz, index) => {
           if (quiz == 'option') {
-            return <QuizOption key={uuidv4()} index={index} ResultFunction={ResultFunction} SaveDataFunction={SaveDataFunction} inputData={inputData} />
+            return <QuizOption key={uuidv4()} index={index} SaveDataFunction={SaveDataFunction} inputData={inputData} />
           }
           else {
-            return <QuizInput key={uuidv4()} index={index} ResultFunction={ResultFunction} SaveDataFunction={SaveDataFunction} inputData={inputData} />
+            return <QuizInput key={uuidv4()} index={index} SaveDataFunction={SaveDataFunction} inputData={inputData} />
           }
         })}
       </div>
@@ -20,7 +20,12 @@ const QuizList = ({list, ResultFunction, SaveDataFunction, inputData}) => {
   }
   else {
     return (
-      <h1 style={{margin: '25px auto'}}>Пусто</h1>
+      <div>
+        <hr />
+        <h1 style={{margin: '25px auto'}}>Пусто</h1>
+        <hr />
+      </div>
+      
     )
   }
 

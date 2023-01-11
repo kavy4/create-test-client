@@ -13,15 +13,9 @@ function App() {
   const SaveDataFromInput = (data, index) => {
     const prevTestObject = testObject
     prevTestObject[index] = data
+    delete prevTestObject[index].id
     setTestObject(prevTestObject)
     // console.log(testObject)
-  }
-
-  const GetReadyObject = (quiz, index) => {
-    const prevTestObject = testObject
-    prevTestObject[index] = quiz
-
-    setTestObject(prevTestObject)
   }
 
   const SendTestInTelegram = () => {
@@ -37,11 +31,9 @@ function App() {
 
       <button onClick={() => setCardList([...cardList, 'input'])}>Создать вопрос с вводом ответа</button>
 
-      <hr />
-      <QuizList list={cardList} ResultFunction={GetReadyObject} SaveDataFunction={SaveDataFromInput} inputData={testObject} />
-      <hr />
+      <QuizList list={cardList} SaveDataFunction={SaveDataFromInput} inputData={testObject} />
 
-      <button onClick={() => SendTestInTelegram()}>Готово</button>
+      <button onClick={() => SendTestInTelegram()} disabled={!Boolean(cardList.length)}>Готово</button>
     </div>
   )
 }

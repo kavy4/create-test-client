@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
-const QuizOption = ({index, ResultFunction, SaveDataFunction, inputData}) => {
+const QuizOption = ({index, SaveDataFunction, inputData}) => {
   if (!inputData[index]) {
     inputData[index] = {
       id: uuidv4(),
@@ -14,16 +14,16 @@ const QuizOption = ({index, ResultFunction, SaveDataFunction, inputData}) => {
 
   const [quiz, setQuiz] = useState(inputData[index])
 
-  const CreateSessionStorage = async (setState, event) => {
+  const CreateSessionStorage = (setState, event) => {
     if (setState == 'setQuestion') {
-      await setQuiz({
+      setQuiz({
         ...quiz,
         title: event
       })
     }
     else {
       if (setState == 'setAnswer1') {
-        await setQuiz({
+        setQuiz({
           ...quiz,
           answers: quiz.answers.map((item, index) => {
             if (index == 0) {
@@ -37,7 +37,7 @@ const QuizOption = ({index, ResultFunction, SaveDataFunction, inputData}) => {
       }
       else {
         if (setState == 'setAnswer2') {
-          await setQuiz({
+          setQuiz({
             ...quiz,
             answers: quiz.answers.map((item, index) => {
               if (index == 1) {
@@ -51,7 +51,7 @@ const QuizOption = ({index, ResultFunction, SaveDataFunction, inputData}) => {
         }
         else {
           if (setState == 'setAnswer3') {
-            await setQuiz({
+            setQuiz({
               ...quiz,
               answers: quiz.answers.map((item, index) => {
                 if (index == 2) {
@@ -64,7 +64,7 @@ const QuizOption = ({index, ResultFunction, SaveDataFunction, inputData}) => {
             })
           }
           else {
-            await setQuiz({
+            setQuiz({
               ...quiz,
               correct: event
             })
