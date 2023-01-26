@@ -22,7 +22,7 @@ const QuizList = ({list, SaveDataFunction, inputData}) => {
     return (
       <div>
         <hr />
-        <h1 style={{margin: '25px auto'}}>Пусто</h1>
+        <h1 style={{margin: '25px auto', textAlign: 'center'}}>Пусто</h1>
         <hr />
       </div>
       
